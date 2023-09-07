@@ -28,16 +28,22 @@ def get_bodies(data):
         i+=6
     return bodies
         
-
-
 # Check that reading the file works
-input = get_data('input_data/circles_N_4.gal')
-print (input)
+data = get_data('input_data/circles_N_4.gal')
+print (data)
 
 # Check that creating bodies work 
-bodies = get_bodies(input)
+bodies = get_bodies(data)
 print(bodies)
 
+fig, ax = plt.subplots()
 
+x_positions = [body.x_pos for body in bodies]
+y_positions = [body.y_pos for body in bodies]
 
-  
+ax.plot(x_positions, y_positions, 'o', markersize=10, label='Bodies')
+
+ax.set_title('Initial position of bodies')
+ax.legend()
+
+plt.show()
