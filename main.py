@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 
 Body = namedtuple("Body", ["x_pos", "y_pos", "mass", "x_vel", "y_vel", "brightness"])
 timestep = 10 ** -5
-time = 10
+time = 100
 
 def get_data(file_name):
     # Open the binary file in binary read mode
@@ -31,7 +31,7 @@ def get_bodies(data):
     return bodies
 
 def calculate_force(body, bodies): #TODO
-    return 5
+    return 5000
         
 def update_pos(body, bodies):
     acc = calculate_force(body, bodies) / body.mass
@@ -56,6 +56,19 @@ def update_all(bodies): # State for one frame
         new_bodies.append(update_pos(body, bodies))
     return new_bodies
 
+def animate(frame, bodies):
+    ax.clear()
+    updated_bodies = update_all(bodies)
+    x_positions = [body.x_pos for body in updated_bodies]
+    y_positions = [body.y_pos for body in updated_bodies]
+    ax.plot(x_positions, y_positions, 'o', markersize=1, label='Bodies')
+    return updated_bodies
+
+fig, ax = plt.subplots()
+bodies = get_bodies(get_data('n-body\input_data\ellipse_N_00010.gal'))
+animation = FuncAnimation(fig, animate, frames=1000, fargs = (bodies,), interval=100)
+plt.show()
+
 # def run_simulation(file_name, ax):
 #     bodies = get_data(file_name)
 #     init_plot(bodies, ax)
@@ -75,18 +88,6 @@ def update_all(bodies): # State for one frame
 #     ax.legend()
 #     plt.show()
     
-# def new_plot(bodies, ax):
-    
-#     ax.clear()
-#     x_positions = [body.x_pos for body in bodies]
-#     y_positions = [body.y_pos for body in bodies]
-#     ax.plot(x_positions, y_positions, 'o', markersize=1, label='Bodies')
-
-fig, ax = plt.subplots()
-actual_bodies = get_bodies(get_data('n-body\input_data\ellipse_N_00010.gal'))
-animation = FuncAnimation(fig, update_all, frames=100, interval=100)
-plt.show()
-
 
 
 # Check that reading the file works
