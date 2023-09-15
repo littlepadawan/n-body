@@ -74,8 +74,8 @@ def calculate_force(body_i, i, bodies):
         if j == i: # Skip calculation for the body itself
             continue
 
-        dx = abs(body_j.x_pos - body_i.x_pos)
-        dy = abs(body_j.y_pos - body_i.y_pos)
+        dx = body_j.x_pos - body_i.x_pos
+        dy = body_j.y_pos - body_i.y_pos
 
         r_squared = dx ** 2 + dy ** 2 
         r = math.sqrt(r_squared)
@@ -141,7 +141,7 @@ def update_all_positions(bodies):
 fig, ax = plt.subplots()
 
 # Define a list to store the bodies
-bodies_container = [convert_data_to_bodies(get_data('input_data/ellipse_N_00010.gal'))]
+bodies_container = [convert_data_to_bodies(get_data('input_data/ellipse_N_02000.gal'))]
 
 def animate(frame, bodies_container):
     # Update the positions of the bodies
@@ -156,15 +156,15 @@ def animate(frame, bodies_container):
     ax.plot(x_positions, y_positions, 'o', markersize=5, label='Bodies')
 
      # Set fixed limits for the x and y axes (adjust these values as needed)
-    ax.set_xlim(-0.5, 1.5)  # Set x-axis limits
-    ax.set_ylim(-0.5, 1.5)  # Set y-axis limits
+    ax.set_xlim(0, 1.1)  # Set x-axis limits
+    ax.set_ylim(0.25, 0.7)  # Set y-axis limits
     
     # Customize your plot here (titles, labels, legends, etc.)
     ax.set_title(f'Time Step {frame + 1}')
     ax.legend()
 
 # Create an animation with a frame for each time step
-animation = FuncAnimation(fig, animate, frames=TIME, fargs=(bodies_container,), interval=1, repeat=False)  # 'TIME' is the total number of time steps
+animation = FuncAnimation(fig, animate, frames=TIME, fargs=(bodies_container,), interval=0.5, repeat=False)  # 'TIME' is the total number of time steps
 
 # Show the animation
 plt.show()

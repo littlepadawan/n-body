@@ -20,8 +20,8 @@ int read_doubles_from_file(int n, double* p, const char* fileName) {
   size_t fileSize = ftell(input_file);
   /* Now use fseek() again to set file position back to beginning of the file. */
   fseek(input_file, 0L, SEEK_SET);
-  if(fileSize != n * sizeof(double)) {
-    printf("read_doubles_from_file error: size of input file '%s' does not match the given n.\n", fileName);
+   if(fileSize != n * sizeof(double)) {
+     printf("read_doubles_from_file error: size of input file '%s' does not match the given n.\n", fileName);
     printf("For n = %d the file size is expected to be (n * sizeof(double)) = %lu but the actual file size is %lu.\n",
 	   n, n * sizeof(double), fileSize);
     return -1;
