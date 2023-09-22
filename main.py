@@ -4,7 +4,7 @@ from matplotlib.animation import FuncAnimation
 
 TIMESTEP = 0.00001  # 10 ** (-5), given in assignment
 EPSILON = 0.001  # 10 ** (-3), given in assignment
-NUMOFCALC = 201 # Decides number of calculations
+NUMOFCALC = 200 # Decides number of calculations
 
 # Kör rad nedan för att välja datafil. Kolla att pathen stämmer.
 # För referens kör rad nedan
@@ -12,9 +12,10 @@ NUMOFCALC = 201 # Decides number of calculations
 
 # Get binary data from fil
 
-data = np.fromfile("input_data\ellipse_N_00010.gal", dtype=float, ) # pos_maxdiff = 0.026866764988
-# data = np.fromfile("input_data\ellipse_N_00100.gal", dtype=float, ) # pos_maxdiff = 0.021573955637
-# data = np.fromfile("input_data\circles_N_2.gal", dtype=float, ) # ej ref data, endast för oservation av animation
+data = np.fromfile("input_data\ellipse_N_00010.gal", dtype=float, )
+#data = np.fromfile("input_data\ellipse_N_00100.gal", dtype=float, )
+#data = np.fromfile("input_data\ellipse_N_01000.gal", dtype=float, ) 
+#data = np.fromfile("input_data\circles_N_2.gal", dtype=float, ) # ej ref data, endast för oservation av animation
 #data = np.fromfile("input_data\sun_and_planets_N_4.gal", dtype=float, ) # ej ref data, endast för oservation av animation
 
 N = int(len(data) / 6) # Number of bodies
@@ -24,10 +25,11 @@ G = 100 / N # Gravitational constant
 data = data.reshape(-1, 6)
 
 # Allocate space for all data points that will be generated
-x_pos_history = np.zeros((NUMOFCALC, N))
-y_pos_history = np.zeros((NUMOFCALC, N))
-x_vel_history = np.zeros((NUMOFCALC, N))
-y_vel_history = np.zeros((NUMOFCALC, N))
+# 201 positions for 200 steps
+x_pos_history = np.zeros((NUMOFCALC + 1, N))
+y_pos_history = np.zeros((NUMOFCALC + 1, N))
+x_vel_history = np.zeros((NUMOFCALC + 1, N))
+y_vel_history = np.zeros((NUMOFCALC + 1, N))
 
 # Extract data to separate arrays
 # Mass and brightness are never manipulated
@@ -82,7 +84,7 @@ def update_position(time_step, current):
 
  # Make all calculations 
 def main_sim():
-    for time_step in range(1, NUMOFCALC):
+    for time_step in range(1, NUMOFCALC + 1):
         for current in range(N):
             update_position(time_step, current)
 
@@ -91,11 +93,11 @@ main_sim()
 # Put data of last time step in the same order as
 output = np.zeros(N*6)
 for i in range(0, N, 1):
-    output[i*6]   = (x_pos_history[NUMOFCALC-1][i])
-    output[i*6+1] = (y_pos_history[NUMOFCALC-1][i])
+    output[i*6]   = (x_pos_history[NUMOFCALC][i])
+    output[i*6+1] = (y_pos_history[NUMOFCALC][i])
     output[i*6+2] = (mass[i])
-    output[i*6+3] = (x_vel_history[NUMOFCALC-1][i])
-    output[i*6+4] = (y_vel_history[NUMOFCALC-1][i])
+    output[i*6+3] = (x_vel_history[NUMOFCALC][i])
+    output[i*6+4] = (y_vel_history[NUMOFCALC][i])
     output[i*6+5] = (brightness[i])
 
 
@@ -112,7 +114,7 @@ def animate(frame, x_pos_history, y_pos_history):
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.plot(x_pos_history[frame], y_pos_history[frame], 'o', markersize=3)
-    ax.set_title(f"Frame {frame}")
+    ax.set_title(f"Frame {frame+1}")
 
 # Create the animation, comment this out if you do not want an animation
 anim = FuncAnimation(fig, animate, frames=NUMOFCALC, fargs=(x_pos_history, y_pos_history), interval=0.01, repeat=False)
